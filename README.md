@@ -9,7 +9,7 @@ Dependencies for this script are managed with Conda.
 Common development tasks:
 - To load the environment, run `conda env create -f environment.yml`.
 - To save updated dependencies to the environment file, run `conda env export --from-history > environment.yml`. 
-- To activate the environment: `conda activate datascience-python3`.
+- To activate the environment: `conda activate firehose-demo-data-source`.
 - To deactivate the environment: `conda deactivate`.
 
 To run the script, use `send_data.sh <type>`. The `<type>` parameter should be one of the following options, each of which will test a different behavior of the destination server and Firehose retry logic:
