@@ -1,6 +1,9 @@
 import sys
 import os
 import boto3
+import datetime
+import base64
+import json
 import logging as log
 
 # Initialize base logging settings for job
@@ -11,7 +14,6 @@ log.basicConfig(stream=sys.stdout,
 
 class FirehoseDataSource():
     def __init__(self):
-        self.numMessages = 1000
         try:
             self.awsKey = os.environ['FIREHOSE_AWS_ACCESS_KEY']
         except:
@@ -36,7 +38,22 @@ class FirehoseDataSource():
         self.streamInfo = self.firehose.describe_delivery_stream(DeliveryStreamName=self.firehoseName)
 
     def run(self, dataType):
-        log.info("Sending data to Firehose...")
+        self.numMessages = 100
+        log.info("Sending {} messages to Firehose...".format(self.numMessages))
+        for i in range(1, self.numMessages + 1):
+            log.info(i)
+            testMessage = {
+                'id' : i,
+                'type' : dataType,
+                'timestamp' : datetime.datetime.now().timestamp() * 1000
+            }
+            messageJson = json.dumps(testMessage)
+            self.firehose.put_record(
+                DeliveryStreamName=self.firehoseName,
+                Record={
+                    'Data' : messageJson.encode('utf-8')
+                }
+            )
 
     def printHelp(self):
         log.info("Message type must be one of:")
