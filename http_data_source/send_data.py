@@ -47,20 +47,20 @@ class FirehoseDataSource():
                 'type' : dataType,
                 'timestamp' : datetime.datetime.now().timestamp() * 1000
             }
-            messageJson = json.dumps(testMessage)
+            messageCsv = "{}, {}, {}\n".format(testMessage['id'], testMessage['type'], testMessage['timestamp'])
             self.firehose.put_record(
                 DeliveryStreamName=self.firehoseName,
                 Record={
-                    'Data' : messageJson.encode('utf-8')
+                    'Data' : messageCsv.encode('utf-8')
                 }
             )
 
     def printHelp(self):
         log.info("Message type must be one of:")
         log.info("")
-        log.info("  succeed: Send a JSON packet that the destination server will process successfully.")
-        log.info("  fail: Send a JSON packet that the destination server will quickly fail to process.")
-        log.info("  fail_then_succeed: Send a JSON packet that will fail at first, then eventually succeed.")
+        log.info("  succeed: Send a packet that the destination server will process successfully.")
+        log.info("  fail: Send a packet that the destination server will quickly fail to process.")
+        log.info("  fail_then_succeed: Send a packet that will fail at first, then eventually succeed.")
         log.info("  hang: Send a packet that will cause the request to hang.")
         log.info("")
 
