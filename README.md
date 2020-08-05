@@ -2,10 +2,30 @@
 
 This repository is a simple test of the Amazon Kinesis Data Firehose service. 
 
-## Data Source
-`http_data_source` contains a set of bash scripts that will send test data directly to Firehose via the HTTP PUT endpoint.
+## Data Source Test
+`http_data_source` contains a python script that will send test data directly to Firehose.
+Dependencies for this script are managed with Conda.
 
-## Data Destination
+Common development tasks:
+- To load the environment, run `conda env create -f environment.yml`.
+- To save updated dependencies to the environment file, run `conda env export --from-history > environment.yml`. 
+- To activate the environment: `conda activate datascience-python3`.
+- To deactivate the environment: `conda deactivate`.
+
+To run the script, use `send_data.sh <type>`. The `<type>` parameter should be one of the following options, each of which will test a different behavior of the destination server and Firehose retry logic:
+
+- `succeed` - Send a JSON packet that the destination server will process successfully.
+- `fail` - Send a JSON packet that the destination server will quickly fail to process.
+- `fail_then_succeed` - Send a JSON packet that will fail at first, then eventually succeed.
+- `hang` - Send a packet that will cause the request to hang.
+
+You must have the following variables on the environment:
+
+- `FIREHOSE_AWS_ACCESS_KEY` - The AWS access key ID to access the Firehose.
+- `FIREHOSE_AWS_SECRET` - The AWS secret to access the Firehose.
+- `FIREHOSE_NAME` - The name of the firehose to push data to.
+
+## Data Destination Test
 `http_data_dest` contains a simple Node.js server which can ingest data from Firehose via the HTTP destination. This server should be run somewhere accessible from the public internet, and Firehose configured to send data to the destination. 
 
-The server will behave differently depending on the contents of the packets sent to its endpoint. The server can either succeed, fail, or hang, testing Firehose's timeout and retry intervals.
+The server will behave differently depending on the contents of the packets sent to its endpoint, discussed above. The server can either succeed, fail, or hang, testing Firehose's timeout and retry intervals.
