@@ -4,6 +4,7 @@ var logger = require('morgan');
 var winston = require('winston');
 
 var ingestRouter = require('./routes/ingest');
+var healthRouter = require('./routes/health');
 
 winston.loggers.add('default', {
     console: {
@@ -22,5 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/ingest', ingestRouter);
+app.use('/health', healthRouter);
+
 
 module.exports = app;
