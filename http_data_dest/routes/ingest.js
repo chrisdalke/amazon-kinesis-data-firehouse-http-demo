@@ -8,7 +8,7 @@ var router = express.Router();
 // Parse and respond to the Firehose data
 // Data is batched, and the request schema is at: 
 // https://docs.aws.amazon.com/firehose/latest/dev/httpdeliveryrequestresponse.html
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
   ingestRecords = req.body.records;
   ingestRequestId = req.body.requestId;
 
