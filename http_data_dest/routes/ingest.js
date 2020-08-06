@@ -12,7 +12,7 @@ router.post('/', function(req, res, next) {
   ingestRecords = req.body.records;
   ingestRequestId = req.body.requestId;
 
-  console.log(`Recieved batch of ${ingestRecords.length} records to ingest...`)
+  console.log(`Received batch of ${ingestRecords.length} records to ingest...`)
   
   rawCsvRecords = []
   ingestRecords.forEach(ingestRecord => {
@@ -22,7 +22,7 @@ router.post('/', function(req, res, next) {
   });
 
   // Parse all records from csv to objects
-  csvRecords = parse(rawCsvRecords.join("\n"), {
+  csvRecords = parse(rawCsvRecords.join(""), {
     columns: ["id", "type", "timestamp"],
     trim: true
   });
@@ -48,7 +48,10 @@ router.post('/', function(req, res, next) {
   ingestFinishTime = Date.now();
 
   // TODO: If we should hang, check if we should succeed after a few requests
-  // Count down from 3 retry requests
+  // Just use a random number
+  if (shouldHang && Math.random() > 0.6) {
+    shouldHang = false
+  }
 
   if (shouldFail) {
     // Fail; send a failure response
