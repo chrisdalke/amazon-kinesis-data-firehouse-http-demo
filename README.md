@@ -26,7 +26,6 @@ To run the script, use `send_data.sh <type>`. The `<type>` parameter should be o
 
 - `succeed` - Send a JSON packet that the destination server will process successfully.
 - `fail` - Send a JSON packet that the destination server will quickly fail to process.
-- `fail_then_succeed` - Send a JSON packet that will fail at first, then eventually succeed.
 - `hang` - Send a packet that will cause the request to hang.
 
 ## Data Destination Test

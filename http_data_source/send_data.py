@@ -68,7 +68,6 @@ class FirehoseDataSource():
         log.info("")
         log.info("  succeed: Send a packet that the destination server will process successfully.")
         log.info("  fail: Send a packet that the destination server will quickly fail to process.")
-        log.info("  fail_then_succeed: Send a packet that will fail at first, then eventually succeed.")
         log.info("  hang: Send a packet that will cause the request to hang.")
         log.info("")
 

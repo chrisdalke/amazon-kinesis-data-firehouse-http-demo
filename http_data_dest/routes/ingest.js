@@ -46,13 +46,7 @@ router.post('/', function(req, res, next) {
   });
 
   ingestFinishTime = Date.now();
-
-  // TODO: If we should hang, check if we should succeed after a few requests
-  // Just use a random number
-  if (shouldHang && Math.random() > 0.6) {
-    shouldHang = false
-  }
-
+  
   if (shouldFail) {
     // Fail; send a failure response
     console.log("Sending failure message for record batch!")
