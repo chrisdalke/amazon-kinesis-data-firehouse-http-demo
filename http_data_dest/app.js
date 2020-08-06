@@ -4,7 +4,7 @@ var logger = require('morgan');
 var winston = require('winston');
 
 var ingestRouter = require('./routes/ingest');
-var healthRouter = require('./routes/health');
+var healthRouter = require('./routes/healthcheck');
 
 winston.loggers.add('default', {
     console: {
