@@ -38,22 +38,30 @@ class FirehoseDataSource():
         self.streamInfo = self.firehose.describe_delivery_stream(DeliveryStreamName=self.firehoseName)
 
     def run(self, dataType):
-        self.numMessages = 100
+        self.numMessages = 1000
+        self.batchSize = 100
         log.info("Sending {} messages to Firehose...".format(self.numMessages))
+        buffer = []
         for i in range(1, self.numMessages + 1):
-            log.info(i)
+            log.info("{} - {}".format(dataType, i))
             testMessage = {
                 'id' : i,
                 'type' : dataType,
                 'timestamp' : datetime.datetime.now().timestamp() * 1000
             }
             messageCsv = "{}, {}, {}\n".format(testMessage['id'], testMessage['type'], testMessage['timestamp'])
-            self.firehose.put_record(
-                DeliveryStreamName=self.firehoseName,
-                Record={
-                    'Data' : messageCsv.encode('utf-8')
-                }
-            )
+            buffer.append(messageCsv)
+            if len(buffer) >= self.batchSize:
+                recordArray = []
+                for message in buffer:
+                    recordArray.append({
+                        'Data' : message.encode('utf-8')
+                    })
+                self.firehose.put_record_batch(
+                    DeliveryStreamName=self.firehoseName,
+                    Records=recordArray
+                )
+                buffer = []
 
     def printHelp(self):
         log.info("Message type must be one of:")
